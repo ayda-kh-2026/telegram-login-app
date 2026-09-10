@@ -85,25 +85,32 @@
       const password = document.getElementById('password').value;
       const initData = tg.initData;
 
-try {
-  const res = await fetch('https://kandice-enneahedral-transmentally.ngrok-free.dev/webhook/login-check', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ initData, username, password })
-  });
+      try {
+        const res = await fetch('https://kandice-enneahedral-transmentally.ngrok-free.dev/webhook/login-check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ initData, username, password })
+        });
 
-  const result = await res.json();
+        const result = await res.json();
+        document.getElementById('password').value = '';
 
-  document.getElementById('password').value = '';
-
-  if (result.success) {
-    messageDiv.style.color = 'green';
-    messageDiv.textContent = 'ورود موفق!';
-
-    setTimeout(() => tg.close(), 1000);
-  } else {
-    messageDiv.style.color = 'red';
-    messageDiv.textContent =
-      result.message || 'نام کاربری یا رمز عبور اشتباه است';
-  }
-}
+        if (result.success) {
+          messageDiv.style.color = 'green';
+          messageDiv.textContent = 'ورود موفق!';
+          setTimeout(() => tg.close(), 1000);
+        } else {
+          messageDiv.style.color = 'red';
+          messageDiv.textContent = result.message || 'نام کاربری یا رمز عبور اشتباه است';
+        }
+      } catch (err) {
+        messageDiv.style.color = 'red';
+        messageDiv.textContent = 'خطا در اتصال به سرور';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'ورود';
+      }
+    });
+  </script>
+</body>
+</html>
