@@ -106,14 +106,16 @@
           messageDiv.textContent = 'ورود موفق!';
           setTimeout(() => tg.close(), 1000);
         }
-        } else {
+        else {
           messageDiv.style.color = 'red';
           messageDiv.textContent = result.message || 'نام کاربری یا رمز عبور اشتباه است';
         }
-      } catch (err) {
+      } 
+      catch (err) {
         messageDiv.style.color = 'red';
         messageDiv.textContent = 'خطا در اتصال به سرور';
-      } finally {
+      } 
+      finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'ورود';
       }
