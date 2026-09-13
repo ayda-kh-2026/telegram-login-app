@@ -68,6 +68,7 @@
   </div>
 
   <script>
+
     const tg = window.Telegram.WebApp;
     tg.ready();
 
@@ -76,50 +77,80 @@
     const messageDiv = document.getElementById('message');
 
     form.addEventListener('submit', async (e) => {
+
       e.preventDefault();
+
       submitBtn.disabled = true;
       submitBtn.textContent = 'در حال ورود...';
       messageDiv.textContent = '';
 
       const username = document.getElementById('username').value;
       const password = document.getElementById('password').value;
+
       const initData = tg.initData;
 
+      // Telegram User ID
+      const chat_id = tg.initDataUnsafe?.user?.id;
+
       try {
-        const res = await fetch('https://kandice-enneahedral-transmentally.ngrok-free.dev/webhook/login-check', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-              initData: tg.initData,
+
+        const res = await fetch(
+          'https://kandice-enneahedral-transmentally.ngrok-free.dev/webhook/login-check',
+          {
+            method: 'POST',
+
+            headers: {
+              'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+              initData: initData,
               username: username,
               password: password,
-              chat_id: tg.initDataUnsafe?.user?.id
+              chat_id: chat_id
             })
-
-        });
+          }
+        );
 
         const result = await res.json();
+
+        console.log('Response from n8n:', result);
+        console.log('chat_id:', result.chat_id);
+
         document.getElementById('password').value = '';
 
-        if (result.success) {        
+        if (result.success) {
+
           messageDiv.style.color = 'green';
           messageDiv.textContent = 'ورود موفق!';
+
           setTimeout(() => tg.close(), 1000);
-        }
-        else {
+
+        } else {
+
           messageDiv.style.color = 'red';
-          messageDiv.textContent = result.message || 'نام کاربری یا رمز عبور اشتباه است';
+          messageDiv.textContent =
+            result.message ||
+            'نام کاربری یا رمز عبور اشتباه است';
+
         }
-      } 
-      catch (err) {
+
+      } catch (err) {
+
+        console.error(err);
+
         messageDiv.style.color = 'red';
         messageDiv.textContent = 'خطا در اتصال به سرور';
-      } 
-      finally {
+
+      } finally {
+
         submitBtn.disabled = false;
         submitBtn.textContent = 'ورود';
+
       }
+
     });
+
   </script>
 </body>
 </html>
