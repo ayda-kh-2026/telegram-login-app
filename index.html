@@ -89,18 +89,21 @@
         const res = await fetch('https://kandice-enneahedral-transmentally.ngrok-free.dev/webhook/login-check', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ initData, username, password })
+          body: JSON.stringify({
+              initData: tg.initData,
+              username: username,
+              password: password,
+              chat_id: tg.initDataUnsafe?.user?.id
+            })
+
         });
 
         const result = await res.json();
         document.getElementById('password').value = '';
 
-        if (result.success) {
-          console.log('chat_id:', result.chat_id);
-        
+        if (result.success) {        
           messageDiv.style.color = 'green';
           messageDiv.textContent = 'ورود موفق!';
-        
           setTimeout(() => tg.close(), 1000);
         }
         } else {
